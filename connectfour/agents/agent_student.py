@@ -55,7 +55,19 @@ class StudentAgent(RandomAgent):
 
         return bestVal
 
+  
     def evaluateBoardState(self, board):
+        if self.terminal():
+        	if self.winner()==1:
+        		return 1
+        	elif self.winner()==2:
+        		return 0
+        	else:
+        		return 0.5
+        else: 
+        			
+
+
         """
         Your evaluation function should look at the current state and return a score for it. 
         As an example, the random agent provided works as follows:
