@@ -57,15 +57,20 @@ class StudentAgent(RandomAgent):
 
   
     def evaluateBoardState(self, board):
-        if self.terminal():
-        	if self.winner()==1:
+    	#if the game is finished, check for winner
+        if board.terminal():
+        	#we've won
+        	if board.winner()==2:
         		return 1
-        	elif self.winner()==2:
+        	#opponent has won	
+        	elif board.winner()==1:
         		return 0
+        	#draw	
         	else:
         		return 0.5
         else: 
-        			
+        	
+        	return random.uniform(0, 1);	
 
 
         """
@@ -99,6 +104,3 @@ class StudentAgent(RandomAgent):
             next_state(turn)
             winner()
         """
-				
-        return random.uniform(0, 1)
-
