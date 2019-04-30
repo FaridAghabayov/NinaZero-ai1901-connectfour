@@ -179,6 +179,24 @@ class Board(object):
                     same_count = 1
                     curr = row[i]
         return 0
+    def _threesAndTwos_rows(self):
+        for row in self.board:
+            same_count = 1
+            threes=[]
+            twos=[]
+            curr = row[0]
+            for i in range(1, self.width):
+                if row[i] == curr:
+                    same_count += 1
+                    if same_count == 2 and curr != 0:
+                        twos.append(curr)
+                    if same_count == 3 and curr != 0:
+                        threes.append(curr)
+                    return(twos,threes)    
+                else:
+                    same_count = 1
+                    curr = row[i]
+        return 0    
 
     def _check_columns(self):
         for i in range(self.width):
@@ -193,6 +211,26 @@ class Board(object):
                     same_count = 1
                     curr = self.board[j][i]
         return 0
+
+    def _threesAndTwos_columns(self):
+        for i in range(self.width):
+            same_count = 1
+            threes=[]
+            twos=[]
+            curr = self.board[0][i]
+            for j in range(1, self.height):
+                if self.board[j][i] == curr:
+                    same_count += 1
+                    if same_count == 2 and curr != 0:
+                        twos.append(curr)
+                    if same_count == 3 and curr != 0:
+                        threes.append(curr)
+                    return(twos,threes)
+                else:
+                    same_count = 1
+                    curr = self.board[j][i]
+        return 0
+    
 
     def _check_diagonals(self):
         boards = [
@@ -221,6 +259,69 @@ class Board(object):
                             k += 1
                             m += 1
         return 0
+    def _threesAndTwos_diagonals(self):
+        boards = [
+            self.board,
+            [row[::-1] for row in copy.deepcopy(self.board)]
+        ]
+
+        for b in boards:
+            for i in range(self.width - self.num_to_connect + 1):
+                for j in range(self.height - self.num_to_connect + 1):
+                    if i > 0 and j > 0:  # would be a redundant diagonal
+                        continue
+
+                    # (j, i) is start of diagonal
+                    same_count = 1
+                    twos=[]
+                    threes=[]
+                    curr = b[j][i]
+                    k, m = j + 1, i + 1
+                    while k < self.height and m < self.width:
+                            if b[k][m] == curr:
+                                same_count += 1
+                                if same_count is 2 and curr != 0:
+                                    twos.append(curr)
+                                if same_count is 3 and curr != 0:
+                                    threes.append(curr)    
+                                return (twos,threes)
+                            else:
+                                same_count = 1
+                                curr = b[k][m]
+                            k += 1
+                            m += 1
+        return 0
+
+    def numOfTwosAndThrees(self):
+        twosRow=[]
+        threesRow=[]
+        twosCol=[]
+        threesCol=[]
+        twosDiag=[]
+        threesDiag=[]
+        firstTwos=0
+        secondTwos=0
+        firstThrees=0
+        secondThrees=0
+        twosRow, threesRow = self._threesAndTwos_rows()
+        twosCol, threesCol, = self._threesAndTwos_columns()
+        twosDiag,threesDiag =self._threesAndTwos_diagonals()
+    
+        for item in twosRow+twosCol+twosDiag:
+            if item == 1:
+                 firstTwos+=1
+            else:
+                secondTwos+=1
+        for item in threesRow+threesCol+threesDiag:
+            if item == 1:
+                firstThrees+=1
+            else:
+                secondThrees+=1
+        return (firstTwos,secondTwos,firstThrees,secondThrees)          
+
+
+
+
 
     def update_scores(self, x, y, current_player, is_player_one):
         this_difference = 0

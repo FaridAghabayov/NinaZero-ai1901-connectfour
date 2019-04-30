@@ -59,18 +59,45 @@ class StudentAgent(RandomAgent):
     def evaluateBoardState(self, board):
     	#if the game is finished, check for winner
         if board.terminal():
-        	#we've won
-        	if board.winner()==2:
-        		return 1
+            #we've won
+            if self.id ==2:
+                if board.winner()==2:
+                    return 1
         	#opponent has won	
-        	elif board.winner()==1:
-        		return 0
+                elif board.winner()==1:
+                    return 0
         	#draw	
-        	else:
-        		return 0.5
-        else: 
-        	
-        	return random.uniform(0, 1);	
+                else:
+                    return 0.5
+            else:
+                if board.winner()==1:
+                    return 1
+            #opponent has won   
+                elif board.winner()==2:
+                    return 0
+            #draw   
+                else:
+                    return 0.5
+
+        else:
+            firstTwos=0
+            secondTwos=0
+            firstThrees=0
+            secondThrees=0
+            twos = []
+            threes = []
+            myEval=0
+            firstTwos,secondTwos,firstThrees,secondThrees=board.numOfTwosAndThrees()
+            if self.id==2: 
+                myEval=(secondThrees *1 + secondTwos*0.5 -firstThrees *1 +firstTwos *0.5)
+            else: 
+                myEval=(firstThrees *1 + firstTwos*0.5 -secondThrees *1 +secondTows *0.5) 
+            if myEval > 1:
+                myEval =1
+            elif myEval<0:
+                myEval =0
+
+            return myEval	
 
 
         """
