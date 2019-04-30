@@ -89,9 +89,11 @@ class StudentAgent(RandomAgent):
             myEval=0
             firstTwos,secondTwos,firstThrees,secondThrees=board.numOfTwosAndThrees()
             if self.id==2: 
-                myEval=(secondThrees *1 + secondTwos*0.5 -firstThrees *1 +firstTwos *0.5)
+                myEval=(secondThrees *1 + secondTwos*0.5 -firstThrees *1 +firstTwos *0.5)/2
+                print(myEval) 
             else: 
-                myEval=(firstThrees *1 + firstTwos*0.5 -secondThrees *1 +secondTows *0.5) 
+                myEval=(firstThrees *1 + firstTwos*0.5 -secondThrees *1 +secondTows *0.5)/2
+                print(myEval) 
             if myEval > 1:
                 myEval =1
             elif myEval<0:

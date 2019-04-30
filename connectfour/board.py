@@ -167,6 +167,7 @@ class Board(object):
         return 0  # no winner yet
 
     def _check_rows(self):
+        self.update_scores(0,0,1,1)
         for row in self.board:
             same_count = 1
             curr = row[0]
@@ -180,23 +181,23 @@ class Board(object):
                     curr = row[i]
         return 0
     def _threesAndTwos_rows(self):
+        self.update_scores(0,0,1,1)
+        threes=[]
+        twos=[]
         for row in self.board:
             same_count = 1
-            threes=[]
-            twos=[]
             curr = row[0]
             for i in range(1, self.width):
                 if row[i] == curr:
                     same_count += 1
                     if same_count == 2 and curr != 0:
-                        twos.append(curr)
+                        twos.append(curr) 
                     if same_count == 3 and curr != 0:
-                        threes.append(curr)
-                    return(twos,threes)    
+                        threes.append(curr)  
                 else:
                     same_count = 1
                     curr = row[i]
-        return 0    
+        return(twos,threes)  
 
     def _check_columns(self):
         for i in range(self.width):
@@ -213,10 +214,11 @@ class Board(object):
         return 0
 
     def _threesAndTwos_columns(self):
+        threes=[]
+        twos=[]
         for i in range(self.width):
             same_count = 1
-            threes=[]
-            twos=[]
+           
             curr = self.board[0][i]
             for j in range(1, self.height):
                 if self.board[j][i] == curr:
@@ -224,12 +226,12 @@ class Board(object):
                     if same_count == 2 and curr != 0:
                         twos.append(curr)
                     if same_count == 3 and curr != 0:
-                        threes.append(curr)
-                    return(twos,threes)
+                        threes.append(curr)    
                 else:
                     same_count = 1
                     curr = self.board[j][i]
-        return 0
+        return(twos,threes)
+        
     
 
     def _check_diagonals(self):
@@ -264,7 +266,8 @@ class Board(object):
             self.board,
             [row[::-1] for row in copy.deepcopy(self.board)]
         ]
-
+        twos=[]
+        threes=[]
         for b in boards:
             for i in range(self.width - self.num_to_connect + 1):
                 for j in range(self.height - self.num_to_connect + 1):
@@ -273,8 +276,7 @@ class Board(object):
 
                     # (j, i) is start of diagonal
                     same_count = 1
-                    twos=[]
-                    threes=[]
+                   
                     curr = b[j][i]
                     k, m = j + 1, i + 1
                     while k < self.height and m < self.width:
@@ -284,13 +286,12 @@ class Board(object):
                                     twos.append(curr)
                                 if same_count is 3 and curr != 0:
                                     threes.append(curr)    
-                                return (twos,threes)
                             else:
                                 same_count = 1
                                 curr = b[k][m]
                             k += 1
                             m += 1
-        return 0
+        return(twos,threes)
 
     def numOfTwosAndThrees(self):
         twosRow=[]
