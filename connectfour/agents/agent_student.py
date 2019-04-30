@@ -4,7 +4,7 @@ import random
 class StudentAgent(RandomAgent):
     def __init__(self, name):
         super().__init__(name)
-        self.MaxDepth = 1
+        self.MaxDepth = 4
 
 
     def get_move(self, board):
@@ -62,22 +62,21 @@ class StudentAgent(RandomAgent):
             #we've won
             if self.id ==2:
                 if board.winner()==2:
-                    return 1
+                    return 10000000
         	#opponent has won	
                 elif board.winner()==1:
-                    return 0
+                    return -10000000
         	#draw	
                 else:
-                    return 0.5
+                    return 0
             else:
                 if board.winner()==1:
-                    return 1
+                    return 10000000
             #opponent has won   
                 elif board.winner()==2:
-                    return 0
-            #draw   
+                    return -10000000
                 else:
-                    return 0.5
+                    return 0
 
         else:
             firstTwos=0
@@ -89,17 +88,14 @@ class StudentAgent(RandomAgent):
             myEval=0
             firstTwos,secondTwos,firstThrees,secondThrees=board.numOfTwosAndThrees()
             if self.id==2: 
-                myEval=(secondThrees *1 + secondTwos*0.5 -firstThrees *1 +firstTwos *0.5)/2
-                print(myEval) 
+                myEval=(secondThrees *1000 + secondTwos*400 -firstThrees *1000 +firstTwos *400)
+                print(myEval)  
             else: 
-                myEval=(firstThrees *1 + firstTwos*0.5 -secondThrees *1 +secondTows *0.5)/2
+                myEval=(firstThrees *1000 + firstTwos*400 -secondThrees *1000 +secondTows *400)
                 print(myEval) 
-            if myEval > 1:
-                myEval =1
-            elif myEval<0:
-                myEval =0
 
-            return myEval	
+            return myEval
+
 
 
         """
