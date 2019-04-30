@@ -4,7 +4,8 @@ import random
 class StudentAgent(RandomAgent):
     def __init__(self, name):
         super().__init__(name)
-        self.MaxDepth = 4
+        self.MaxDepth = 4 
+
 
 
     def get_move(self, board):
@@ -24,7 +25,7 @@ class StudentAgent(RandomAgent):
             next_state = board.next_state(self.id, move[1])
             moves.append( move )
             vals.append( self.dfMiniMax(next_state, 1) )
-
+        print(vals)
         bestMove = moves[vals.index( max(vals) )]
         return bestMove
 
@@ -60,23 +61,15 @@ class StudentAgent(RandomAgent):
     	#if the game is finished, check for winner
         if board.terminal():
             #we've won
-            if self.id ==2:
-                if board.winner()==2:
-                    return 10000000
+            if board.winner()==self.id:
+                return 100000000000000000
+                sys.exit('Game Over')
         	#opponent has won	
-                elif board.winner()==1:
-                    return -10000000
-        	#draw	
-                else:
-                    return 0
+         	
             else:
-                if board.winner()==1:
-                    return 10000000
-            #opponent has won   
-                elif board.winner()==2:
-                    return -10000000
-                else:
-                    return 0
+                return -100000000000000000
+                sys.exit('Game Over')
+
 
         else:
             firstTwos=0
@@ -87,13 +80,11 @@ class StudentAgent(RandomAgent):
             threes = []
             myEval=0
             firstTwos,secondTwos,firstThrees,secondThrees=board.numOfTwosAndThrees()
-            if self.id==2: 
-                myEval=(secondThrees *1000 + secondTwos*400 -firstThrees *1000 +firstTwos *400)
-                print(myEval)  
-            else: 
+            if self.id==2:
+                myEval=(secondThrees *1000 + secondTwos*400 -firstThrees *1000 +firstTwos *400) 
+            else:
                 myEval=(firstThrees *1000 + firstTwos*400 -secondThrees *1000 +secondTows *400)
-                print(myEval) 
-
+               
             return myEval
 
 
