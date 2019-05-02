@@ -82,7 +82,7 @@ class StudentAgent(RandomAgent):
 
         if(self.id == 2):
             if(board.terminal() == True):
-                return 1000000;
+                return 10000;
                 sys.exit();
 
             elif not (isinstance(board.next_state(1,0),int)):
@@ -209,28 +209,37 @@ class StudentAgent(RandomAgent):
             val==1
         if self.id==1:
             val ==2
+        firstTwos=0
+        secondTwos=0
+        firstThrees=0
+        secondThrees=0
+        twos = []
+        threes = []
+        myEval=0
+        firstTwos,secondTwos,firstThrees,secondThrees=self.totalTwosAndThrees(board)
+        if self.id==2:
+            myEval=(secondThrees *10 + secondTwos*4-firstThrees *10 +firstTwos *4)
+        else: 
+            myEval=(firstThrees *10 + firstTwos*4 -secondThrees *10 +secondTwos *4)    
         for row in range (0,6):
-                if board.get_cell_value(row,1)==val and board.get_cell_value(row,2)==val and board.get_cell_value(row,0)==0 and board.get_cell_value(row,3)==0:
-                    myEval= -10000
-                elif board.get_cell_value(row,2)==val and board.get_cell_value(row,3)==val and board.get_cell_value(row,1)==0 and board.get_cell_value(row,4)==0:
-                    myEval= -10000
-                elif board.get_cell_value(row,3)==val and board.get_cell_value(row,4)==val and board.get_cell_value(row,2)==0 and board.get_cell_value(row,5)==0:
-                    myEval= -10000
-                elif board.get_cell_value(row,4)==val and board.get_cell_value(row,5)==val and board.get_cell_value(row,3)==0 and board.get_cell_value(row,6)==0:
-                    myEval= -10000
-                else:
-                    firstTwos=0
-                    secondTwos=0
-                    firstThrees=0
-                    secondThrees=0
-                    twos = []
-                    threes = []
-                    myEval=0
-                    firstTwos,secondTwos,firstThrees,secondThrees=self.totalTwosAndThrees(board)
-                    if self.id==2:
-                        myEval=(secondThrees *10 + secondTwos*4-firstThrees *10 +firstTwos *4)
-                    else: 
-                        myEval=(firstThrees *10 + firstTwos*4 -secondThrees *10 +secondTwos *4)
+            if board.get_cell_value(row,1)==val and board.get_cell_value(row,2)==val and board.get_cell_value(row,0)==0 and board.get_cell_value(row,3)==0:
+                myEval= -500
+            elif board.get_cell_value(row,2)==val and board.get_cell_value(row,3)==val and board.get_cell_value(row,1)==0 and board.get_cell_value(row,4)==0:
+                myEval= -500
+            elif board.get_cell_value(row,3)==val and board.get_cell_value(row,4)==val and board.get_cell_value(row,2)==0 and board.get_cell_value(row,5)==0:
+                myEval= -500
+            elif board.get_cell_value(row,4)==val and board.get_cell_value(row,5)==val and board.get_cell_value(row,3)==0 and board.get_cell_value(row,6)==0:
+                myEval= -500
+            if board.get_cell_value(row,1)==self.id and board.get_cell_value(row,2)==self.id and board.get_cell_value(row,0)==0 and board.get_cell_value(row,3)==0:
+                myEval=  500
+            elif board.get_cell_value(row,2)==self.id and board.get_cell_value(row,3)==self.id and board.get_cell_value(row,1)==0 and board.get_cell_value(row,4)==0:
+                myEval=  500
+            elif board.get_cell_value(row,3)==self.id and board.get_cell_value(row,4)==self.id and board.get_cell_value(row,2)==0 and board.get_cell_value(row,5)==0:
+                myEval=  500
+            elif board.get_cell_value(row,4)==self.id and board.get_cell_value(row,5)==self.id and board.get_cell_value(row,3)==0 and board.get_cell_value(row,6)==0:
+                myEval=  500
+
+
         return myEval
     def rowTwosThrees(self, board):
         threes=[]
