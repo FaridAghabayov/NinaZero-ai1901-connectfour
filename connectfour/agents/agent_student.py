@@ -2,6 +2,7 @@ from connectfour.agents.computer_player import RandomAgent
 import random
 import heapq
 
+
 class StudentAgent(RandomAgent):
     def __init__(self, name):
         super().__init__(name)
@@ -25,23 +26,28 @@ class StudentAgent(RandomAgent):
             next_state = board.next_state(self.id, move[1])
             moves.append( move )
             vals.append( self.dfMiniMax(next_state, 1) )
-
-        #bestMove = moves[vals.index( max(vals) )]
-
         newMove = []
         best = []
-        for val in vals:
-            if val == max(vals):
+        val=0
+        for val in range(0, len(vals)):
+            if vals[val] == max(vals):
                 newMove.append(val);
-
-        if((max(vals) > 2) or min(vals) < -100 ) and len(newMove) == 1:
-            bestMove = moves[vals.index(max(vals) )]
-        elif len(newMove) > 1:
-            best = heapq.nlargest(3, range(len(vals)), key=vals.__getitem__)
-            bestMove = moves[best[1]]
+        if len(newMove)>1:
+            bestMove = moves[self.findMiddle(newMove)]
         else:
-            bestMove = moves[vals.index(max(vals) )]
+            bestMove = moves[vals.index( max(vals) )]
         print(vals)
+        return bestMove
+
+       
+
+    def findMiddle(self, input_list):
+        middle = float(len(input_list))/2
+        if middle % 2 != 0:
+            return input_list[int(middle - .5)]
+        else:
+            return (input_list[int(middle)])
+
 
         return bestMove
 
@@ -64,13 +70,11 @@ class StudentAgent(RandomAgent):
             moves.append( move )
             vals.append( self.dfMiniMax(next_state, depth + 1) )
 
-
         if depth % 2 == 1:
             bestVal = min(vals)
         else:
             bestVal = max(vals)
-        print(vals)
-
+        
         return bestVal
 
 
@@ -208,7 +212,7 @@ class StudentAgent(RandomAgent):
         if self.id==2:
             val==1
         if self.id==1:
-            val ==2
+            val ==2 
         firstTwos=0
         secondTwos=0
         firstThrees=0
@@ -218,43 +222,56 @@ class StudentAgent(RandomAgent):
         myEval=0
         firstTwos,secondTwos,firstThrees,secondThrees=self.totalTwosAndThrees(board)
         if self.id==2:
-            myEval=(secondThrees *10 + secondTwos*4-firstThrees *10 +firstTwos *4)
+            myEval=(secondThrees *75 + secondTwos*20-firstThrees *75 +firstTwos *20)
         else: 
-            myEval=(firstThrees *10 + firstTwos*4 -secondThrees *10 +secondTwos *4)    
+            myEval=(firstThrees *75 + firstTwos*20 -secondThrees *75 +secondTwos *20)
+
+   
+
+
+
         for row in range (0,6):
             if board.get_cell_value(row,1)==val and board.get_cell_value(row,2)==val and board.get_cell_value(row,0)==0 and board.get_cell_value(row,3)==0:
-                myEval= -500
+                myEval= -75
             elif board.get_cell_value(row,2)==val and board.get_cell_value(row,3)==val and board.get_cell_value(row,1)==0 and board.get_cell_value(row,4)==0:
-                myEval= -500
+                myEval= -75
             elif board.get_cell_value(row,3)==val and board.get_cell_value(row,4)==val and board.get_cell_value(row,2)==0 and board.get_cell_value(row,5)==0:
-                myEval= -500
+                myEval= -75
             elif board.get_cell_value(row,4)==val and board.get_cell_value(row,5)==val and board.get_cell_value(row,3)==0 and board.get_cell_value(row,6)==0:
-                myEval= -500
+                myEval= -75
             if board.get_cell_value(row,1)==self.id and board.get_cell_value(row,2)==self.id and board.get_cell_value(row,0)==0 and board.get_cell_value(row,3)==0:
-                myEval=  500
+                myEval=  75
             elif board.get_cell_value(row,2)==self.id and board.get_cell_value(row,3)==self.id and board.get_cell_value(row,1)==0 and board.get_cell_value(row,4)==0:
-                myEval=  500
+                myEval=  75
             elif board.get_cell_value(row,3)==self.id and board.get_cell_value(row,4)==self.id and board.get_cell_value(row,2)==0 and board.get_cell_value(row,5)==0:
-                myEval=  500
+                myEval=  75
             elif board.get_cell_value(row,4)==self.id and board.get_cell_value(row,5)==self.id and board.get_cell_value(row,3)==0 and board.get_cell_value(row,6)==0:
+                myEval=  75
+            elif board.get_cell_value(row,4)==self.id and board.get_cell_value(row,5)==self.id and board.get_cell_value(row,3)==self.id and board.get_cell_value(row,2)==0 and board.get_cell_value(row,6)==0 :
                 myEval=  500
-
+            elif board.get_cell_value(row,4)==self.id and board.get_cell_value(row,2)==self.id and board.get_cell_value(row,3)==self.id and board.get_cell_value(row,1)==0 and board.get_cell_value(row,5)==0 :
+                myEval=  500
+            elif board.get_cell_value(row,1)==self.id and board.get_cell_value(row,2)==self.id and board.get_cell_value(row,3)==self.id and board.get_cell_value(row,0)==0 and board.get_cell_value(row,4)==0 :
+                myEval=  500
+            
+            
 
         return myEval
     def rowTwosThrees(self, board):
         threes=[]
         twos=[]
-        rows=[]
-        same_count =1
+       
         for row in range(0,6):
+            same_count =1
             curr = board.get_cell_value(row,0)
             for col in range(1,7):
                 if board.get_cell_value(row,col)==curr:
                     same_count += 1
-                    if same_count == 2 and curr != 0:
-                        twos.append(curr) 
                     if same_count == 3 and curr != 0:
                         threes.append(curr) 
+                    elif same_count == 2 and curr != 0:
+                        twos.append(curr) 
+                    
         return(twos,threes)
     def colTwosThrees(self, board):
         threes=[]
@@ -279,23 +296,21 @@ class StudentAgent(RandomAgent):
         threes=[]
         for i in range(4):
             for j in range(3):
-                if i > 0 and j > 0:  # would be a redundant diagonal
-                    continue
-                    same_count = 1
-                    curr = board.get_cell_value(j,i)
-                    k, m = j + 1, i + 1
-                    while k < 6 and m < 7:
-                            if b[k][m] == curr:
-                                same_count += 1
-                                if same_count is 2 and curr != 0:
-                                    twos.append(curr)
-                                if same_count is 3 and curr != 0:
-                                    threes.append(curr)    
-                            else:
-                                same_count = 1
-                                curr = b[k][m]
-                            k += 1
-                            m += 1
+                same_count = 1
+                curr = board.get_cell_value(j,i)
+                k, m = j + 1, i + 1
+                while k < 6 and m < 7:
+                    if board.get_cell_value(k,m) == curr:
+                        same_count += 1
+                        if same_count is 2 and curr != 0:
+                            twos.append(curr)
+                        if same_count is 3 and curr != 0:
+                            threes.append(curr)    
+                    else:
+                        same_count = 1
+                        curr = board.get_cell_value(k,m)
+                    k += 1
+                    m += 1
         return(twos,threes)
 
     def totalTwosAndThrees(self,board):

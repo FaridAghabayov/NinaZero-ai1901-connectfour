@@ -67,9 +67,11 @@ class Board(object):
         """
         Take a row, col position on the board and returns whether
         that row value is the bottom-most empty position in the column.
+
         Args:
             row: int value for row position on Board
             col: int value for column position on Board
+
         Returns: True is move is valid. False, otherwise
         """
         return row >= 0 and self.try_move(col) == row
@@ -165,7 +167,6 @@ class Board(object):
         return 0  # no winner yet
 
     def _check_rows(self):
-        self.update_scores(0,0,1,1)
         for row in self.board:
             same_count = 1
             curr = row[0]
@@ -178,7 +179,6 @@ class Board(object):
                     same_count = 1
                     curr = row[i]
         return 0
- 
 
     def _check_columns(self):
         for i in range(self.width):
@@ -194,7 +194,6 @@ class Board(object):
                     curr = self.board[j][i]
         return 0
 
-    
     def _check_diagonals(self):
         boards = [
             self.board,
@@ -222,8 +221,6 @@ class Board(object):
                             k += 1
                             m += 1
         return 0
-   
-
 
     def update_scores(self, x, y, current_player, is_player_one):
         this_difference = 0
@@ -316,4 +313,5 @@ class Board(object):
                 3 * self.height * num_to_connect +
                 3 * self.width + 3 * self.height -
                 4 * num_to_connect +
-                2 * num_to_connect * num_to_connect + 2)
+                2 * num_to_connect * num_to_connect + 2
+            )
