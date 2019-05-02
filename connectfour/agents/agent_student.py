@@ -1,11 +1,11 @@
 from connectfour.agents.computer_player import RandomAgent
 import random
+import heapq
 
 class StudentAgent(RandomAgent):
     def __init__(self, name):
         super().__init__(name)
-        self.MaxDepth = 4 
-
+        self.MaxDepth = 1
 
 
     def get_move(self, board):
@@ -25,13 +25,28 @@ class StudentAgent(RandomAgent):
             next_state = board.next_state(self.id, move[1])
             moves.append( move )
             vals.append( self.dfMiniMax(next_state, 1) )
-        print(vals)
-        bestMove = moves[vals.index( max(vals) )]
+
+        #bestMove = moves[vals.index( max(vals) )]
+
+        newMove = []
+        best = []
+        for val in vals:
+            if val == max(vals):
+                newMove.append(val);
+
+        if((max(vals) > 2) or min(vals) < -100 ) and len(newMove) == 1:
+            bestMove = moves[vals.index(max(vals) )]
+        elif len(newMove) > 1:
+            best = heapq.nlargest(3, range(len(vals)), key=vals.__getitem__)
+            bestMove = moves[best[1]]
+        else:
+            bestMove = moves[vals.index(max(vals) )]
+
         return bestMove
 
     def dfMiniMax(self, board, depth):
         # Goal return column with maximized scores of all possible next states
-        
+
         if depth == self.MaxDepth:
             return self.evaluateBoardState(board)
 
@@ -44,11 +59,11 @@ class StudentAgent(RandomAgent):
                 next_state = board.next_state(self.id % 2 + 1, move[1])
             else:
                 next_state = board.next_state(self.id, move[1])
-                
+
             moves.append( move )
             vals.append( self.dfMiniMax(next_state, depth + 1) )
 
-        
+
         if depth % 2 == 1:
             bestVal = min(vals)
         else:
@@ -56,22 +71,169 @@ class StudentAgent(RandomAgent):
 
         return bestVal
 
-  
-    def evaluateBoardState(self, board):
-    	#if the game is finished, check for winner
-        if board.terminal():
-            #we've won
-            if board.winner()==self.id:
-                return 100000000000000000
-                sys.exit('Game Over')
-        	#opponent has won	
-         	
-            else:
-                return -100000000000000000
-                sys.exit('Game Over')
 
+    def evaluateBoardState(self, board):
+        #if the game is finished, check for winner
+
+        #winning move detected and made, prioritising over others
+
+
+        if(self.id == 2):
+            if(board.terminal() == True):
+                return 1000000;
+                sys.exit();
+
+            elif not (isinstance(board.next_state(1,0),int)):
+                val = self.blockAndEval(board);
+                return val;
+
+            elif not (isinstance(board.next_state(1,1),int)):
+                val = self.blockAndEval(board);
+                return val;
+
+            elif not (isinstance(board.next_state(1,2),int)):
+                val = self.blockAndEval(board);
+                return val;
+
+            elif not (isinstance(board.next_state(1,3),int)):
+                val = self.blockAndEval(board);
+                return val;
+
+            elif not (isinstance(board.next_state(1,4),int)):
+                val = self.blockAndEval(board);
+                return val;
+
+            elif not (isinstance(board.next_state(1,5),int)):
+                val = self.blockAndEval(board);
+                return val;
+
+            elif not (isinstance(board.next_state(1,6),int)):
+                val = self.blockAndEval(board);
+                return val;
+
+            else:
+
+                firstTwos=0
+                secondTwos=0
+                firstThrees=0
+                secondThrees=0
+                twos = []
+                threes = []
+                myEval=0
+                firstTwos,secondTwos,firstThrees,secondThrees=board.numOfTwosAndThrees()
+                if self.id==2:
+                    if(board.get_cell_value(5,4) == 0):
+                        return 1;
+                    elif(board.get_cell_value(5,5) == 0):
+                        return 2;
+                    else:
+                        myEval=(secondThrees *10 + secondTwos*4-firstThrees *10 +firstTwos *4)
+                else:
+                    if(board.get_cell_value(5,4) == 0):
+                        return 1;
+                    elif(board.get_cell_value(5,5) == 0):
+                        return 2;
+                    else:
+                        myEval=(firstThrees *10 + firstTwos*4 -secondThrees *10 +secondTwos *4)
+
+                return myEval
 
         else:
+            if(board.terminal() == True):
+                return 1000000;
+
+            elif not (isinstance(board.next_state(2,0),int)):
+                val = self.blockAndEval(board);
+                return val;
+
+            elif not (isinstance(board.next_state(2,1),int)):
+                val = self.blockAndEval(board);
+                return val;
+
+            elif not (isinstance(board.next_state(2,2),int)):
+                val = self.blockAndEval(board);
+                return val;
+
+            elif not (isinstance(board.next_state(2,3),int)):
+                val = self.blockAndEval(board);
+                return val;
+
+            elif not (isinstance(board.next_state(2,4),int)):
+                val = self.blockAndEval(board);
+                return val;
+
+            elif not (isinstance(board.next_state(2,5),int)):
+                val = self.blockAndEval(board);
+                return val;
+
+            elif not (isinstance(board.next_state(2,6),int)):
+                val = self.blockAndEval(board);
+                return val;
+
+            else:
+
+                firstTwos=0
+                secondTwos=0
+                firstThrees=0
+                secondThrees=0
+                twos = []
+                threes = []
+                myEval=0
+                firstTwos,secondTwos,firstThrees,secondThrees=board.numOfTwosAndThrees()
+                if self.id==2:
+                    if(board.get_cell_value(5,4) == 0):
+                        return 1;
+                    elif(board.get_cell_value(5,5) == 0):
+                        return 2;
+                    else:
+                        myEval=(secondThrees *10 + secondTwos*4-firstThrees *10 +firstTwos *4)
+                else:
+                    if(board.get_cell_value(5,4) == 0):
+                        return 1;
+                    elif(board.get_cell_value(5,5) == 0):
+                        return 2;
+                    else:
+                        myEval=(firstThrees *10 + firstTwos*4 -secondThrees *10 +secondTwos *4)
+
+                return myEval
+
+
+
+    def blockAndEval(self,board):
+
+        value = self.blockMove(board,self.id);
+        return value;
+
+    def blockMove(self,board,id):
+
+        if (id == 2):
+            val = 1;
+        else:
+            val = 2;
+
+        if not (isinstance(board.next_state(val,3),int)) and (board.next_state(val,3).terminal() == True):
+            return -10000;
+
+        elif not (isinstance(board.next_state(val,4),int)) and (board.next_state(val,4).terminal() == True):
+            return -10000;
+
+        elif not (isinstance(board.next_state(val,5),int)) and (board.next_state(val,5).terminal() == True):
+            return -10000;
+
+        elif not (isinstance(board.next_state(val,6),int)) and (board.next_state(val,6).terminal() == True):
+            return -10000;
+
+        elif not (isinstance(board.next_state(val,0),int)) and (board.next_state(val,0).terminal() == True):
+            return -10000;
+
+        elif not (isinstance(board.next_state(val,1),int)) and (board.next_state(val,1).terminal() == True):
+            return -10000;
+
+        elif not (isinstance(board.next_state(val,2),int)) and (board.next_state(val,2).terminal() == True):
+            return -10000;
+
+        else:
+
             firstTwos=0
             secondTwos=0
             firstThrees=0
@@ -81,33 +243,155 @@ class StudentAgent(RandomAgent):
             myEval=0
             firstTwos,secondTwos,firstThrees,secondThrees=board.numOfTwosAndThrees()
             if self.id==2:
-                myEval=(secondThrees *1000 + secondTwos*400 -firstThrees *1000 +firstTwos *400) 
+                if(board.get_cell_value(5,4) == 0):
+                    return 1;
+                elif(board.get_cell_value(5,5) == 0):
+                    return 2;
+                else:
+                    myEval=(secondThrees *10 + secondTwos*4-firstThrees *10 +firstTwos *4)
             else:
-                myEval=(firstThrees *1000 + firstTwos*400 -secondThrees *1000 +secondTows *400)
-               
+                if(board.get_cell_value(5,4) == 0):
+                    return 1;
+                elif(board.get_cell_value(5,5) == 0):
+                    return 2;
+                else:
+                    myEval=(firstThrees *10 + firstTwos*4 -secondThrees *10 +secondTwos *4)
+
             return myEval
 
 
+    def printBoard(self,board):
+
+        for i in range (0,6):
+            vals = []
+            for j in range (0,7):
+                if not (isinstance(board,int)):
+                    vals.append(board.get_cell_value(i,j))
+            print(vals);
+        print(" ")
+
+    def _threesAndTwos_rows(board):
+        threes=[]
+        twos=[]
+        for row in board:
+            same_count = 1
+            curr = row[0]
+            for i in range(1, board.width):
+                if row[i] == curr:
+                    same_count += 1
+                    if same_count == 2 and curr != 0:
+                        twos.append(curr) 
+                    if same_count == 3 and curr != 0:
+                        threes.append(curr)  
+                else:
+                    same_count = 1
+                    curr = row[i]
+        return(twos,threes)  
+
+
+    def _threesAndTwos_columns(board):
+        threes=[]
+        twos=[]
+        for i in range(board.width):
+            same_count = 1
+           
+            curr =board[0][i]
+            for j in range(1, board.height):
+                if ard[j][i] == curr:
+                    same_count += 1
+                    if same_count == 2 and curr != 0:
+                        twos.append(curr)
+                    if same_count == 3 and curr != 0:
+                        threes.append(curr)    
+                else:
+                    same_count = 1
+                    curr = board[j][i]
+        return(twos,threes)
+        
+
+
+    def _threesAndTwos_diagonals(board):
+        boards = [
+            board,
+            [row[::-1] for row in copy.deepcopy(board)]
+        ]
+        twos=[]
+        threes=[]
+        for b in boards:
+            for i in range(board.width - board.num_to_connect + 1):
+                for j in range(board.height - board.num_to_connect + 1):
+                    if i > 0 and j > 0:  # would be a redundant diagonal
+                        continue
+
+                    # (j, i) is start of diagonal
+                    same_count = 1
+                   
+                    curr = b[j][i]
+                    k, m = j + 1, i + 1
+                    while k < board.height and m < board.width:
+                            if b[k][m] == curr:
+                                same_count += 1
+                                if same_count is 2 and curr != 0:
+                                    twos.append(curr)
+                                if same_count is 3 and curr != 0:
+                                    threes.append(curr)    
+                            else:
+                                same_count = 1
+                                curr = b[k][m]
+                            k += 1
+                            m += 1
+        return(twos,threes)
+
+
+
+
+
+    def numOfTwosAndThrees(self):
+        twosRow=[]
+        threesRow=[]
+        twosCol=[]
+        threesCol=[]
+        twosDiag=[]
+        threesDiag=[]
+        firstTwos=0
+        secondTwos=0
+        firstThrees=0
+        secondThrees=0
+        twosRow, threesRow = self._threesAndTwos_rows()
+        twosCol, threesCol, = self._threesAndTwos_columns()
+        twosDiag,threesDiag =self._threesAndTwos_diagonals()
+    
+        for item in twosRow+twosCol+twosDiag:
+            if item == 1:
+                 firstTwos+=1
+            else:
+                secondTwos+=1
+        for item in threesRow+threesCol+threesDiag:
+            if item == 1:
+                firstThrees+=1
+            else:
+                secondThrees+=1
+        return (firstTwos,secondTwos,firstThrees,secondThrees)          
 
         """
-        Your evaluation function should look at the current state and return a score for it. 
+        Your evaluation function should look at the current state and return a score for it.
         As an example, the random agent provided works as follows:
             If the opponent has won this game, return -1.
             If we have won the game, return 1.
             If neither of the players has won, return a random number.
         """
-        
+
         """
         These are the variables and functions for board objects which may be helpful when creating your Agent.
         Look into board.py for more information/descriptions of each, or to look for any other definitions which may help you.
 
         Board Variables:
-            board.width 
+            board.width
             board.height
             board.last_move
             board.num_to_connect
             board.winning_zones
-            board.score_array 
+            board.score_array
             board.current_player_score
 
         Board Functions:
