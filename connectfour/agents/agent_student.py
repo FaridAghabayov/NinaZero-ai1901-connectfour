@@ -196,17 +196,6 @@ class StudentAgent(RandomAgent):
 
 
 
-    def printBoard(self,board):
-
-        for i in range (0,6):
-            vals = []
-            for j in range (0,7):
-                if not (isinstance(board,int)):
-                    vals.append(board.get_cell_value(i,j))
-            print(vals);
-        print(" ")
-
-
     def myEval(self, board):
         val=1
         if self.id==2:
@@ -247,12 +236,24 @@ class StudentAgent(RandomAgent):
                 myEval=  75
             elif board.get_cell_value(row,4)==self.id and board.get_cell_value(row,5)==self.id and board.get_cell_value(row,3)==0 and board.get_cell_value(row,6)==0:
                 myEval=  75
-            elif board.get_cell_value(row,4)==self.id and board.get_cell_value(row,5)==self.id and board.get_cell_value(row,3)==self.id and board.get_cell_value(row,2)==0 and board.get_cell_value(row,6)==0 :
-                myEval=  500
-            elif board.get_cell_value(row,4)==self.id and board.get_cell_value(row,2)==self.id and board.get_cell_value(row,3)==self.id and board.get_cell_value(row,1)==0 and board.get_cell_value(row,5)==0 :
-                myEval=  500
-            elif board.get_cell_value(row,1)==self.id and board.get_cell_value(row,2)==self.id and board.get_cell_value(row,3)==self.id and board.get_cell_value(row,0)==0 and board.get_cell_value(row,4)==0 :
-                myEval=  500
+            elif board.get_cell_value(row,4)==self.id and board.get_cell_value(row,5)==self.id and board.get_cell_value(row,3)==self.id:
+                if board.get_cell_value(row,6)==0  and board.get_cell_value(row,2)==0:
+                    myEval=  500
+                elif (board.get_cell_value(row,6)!=0  and board.get_cell_value(row,2)==0) or (board.get_cell_value(row,6)==0  and board.get_cell_value(row,2)!=0) : 
+                    return 100
+
+            elif board.get_cell_value(row,4)==self.id and board.get_cell_value(row,2)==self.id and board.get_cell_value(row,3)==self.id :
+                if board.get_cell_value(row,1)==0 and board.get_cell_value(row,5)==0:
+                    myEval=  500
+                elif (board.get_cell_value(row,5)!=0  and board.get_cell_value(row,1)==0) or (board.get_cell_value(row,5)==0  and board.get_cell_value(row,1)!=0) : 
+                    return 100
+
+            elif board.get_cell_value(row,1)==self.id and board.get_cell_value(row,2)==self.id and board.get_cell_value(row,3)==self.id:
+                if board.get_cell_value(row,0)==0 and board.get_cell_value(row,4)==0:
+                    myEval=  500
+                elif (board.get_cell_value(row,0)!=0  and board.get_cell_value(row,4)==0) or (board.get_cell_value(row,0)==0  and board.get_cell_value(row,4)!=0) : 
+                    return 100
+
             
             
 
@@ -267,9 +268,9 @@ class StudentAgent(RandomAgent):
             for col in range(1,7):
                 if board.get_cell_value(row,col)==curr:
                     same_count += 1
-                    if same_count == 3 and curr != 0:
+                    if same_count == 3 and curr != 0 and col!=6 :
                         threes.append(curr) 
-                    elif same_count == 2 and curr != 0:
+                    elif same_count == 2 and curr != 0 and col!=5:
                         twos.append(curr) 
                     
         return(twos,threes)
@@ -282,10 +283,11 @@ class StudentAgent(RandomAgent):
             for j in range(1, 6):
                 if board.get_cell_value(j,i) == curr:
                     same_count += 1
-                    if same_count == 2 and curr != 0:
-                        twos.append(curr)
-                    if same_count == 3 and curr != 0:
+                    if same_count == 3 and curr != 0 and j !=5:
                         threes.append(curr)    
+                    if same_count == 2 and curr != 0 and j !=4:
+                        twos.append(curr)
+                   
                 else:
                     same_count = 1
                     curr = board.get_cell_value(j,i)
