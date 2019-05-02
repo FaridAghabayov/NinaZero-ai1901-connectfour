@@ -41,6 +41,7 @@ class StudentAgent(RandomAgent):
             bestMove = moves[best[1]]
         else:
             bestMove = moves[vals.index(max(vals) )]
+        print(vals)
 
         return bestMove
 
@@ -68,6 +69,7 @@ class StudentAgent(RandomAgent):
             bestVal = min(vals)
         else:
             bestVal = max(vals)
+        print(vals)
 
         return bestVal
 
@@ -112,31 +114,9 @@ class StudentAgent(RandomAgent):
                 return val;
 
             else:
+                return self.myEval(board)
 
-                firstTwos=0
-                secondTwos=0
-                firstThrees=0
-                secondThrees=0
-                twos = []
-                threes = []
-                myEval=0
-                firstTwos,secondTwos,firstThrees,secondThrees=board.numOfTwosAndThrees()
-                if self.id==2:
-                    if(board.get_cell_value(5,4) == 0):
-                        return 1;
-                    elif(board.get_cell_value(5,5) == 0):
-                        return 2;
-                    else:
-                        myEval=(secondThrees *10 + secondTwos*4-firstThrees *10 +firstTwos *4)
-                else:
-                    if(board.get_cell_value(5,4) == 0):
-                        return 1;
-                    elif(board.get_cell_value(5,5) == 0):
-                        return 2;
-                    else:
-                        myEval=(firstThrees *10 + firstTwos*4 -secondThrees *10 +secondTwos *4)
-
-                return myEval
+               
 
         else:
             if(board.terminal() == True):
@@ -171,32 +151,7 @@ class StudentAgent(RandomAgent):
                 return val;
 
             else:
-
-                firstTwos=0
-                secondTwos=0
-                firstThrees=0
-                secondThrees=0
-                twos = []
-                threes = []
-                myEval=0
-                firstTwos,secondTwos,firstThrees,secondThrees=board.numOfTwosAndThrees()
-                if self.id==2:
-                    if(board.get_cell_value(5,4) == 0):
-                        return 1;
-                    elif(board.get_cell_value(5,5) == 0):
-                        return 2;
-                    else:
-                        myEval=(secondThrees *10 + secondTwos*4-firstThrees *10 +firstTwos *4)
-                else:
-                    if(board.get_cell_value(5,4) == 0):
-                        return 1;
-                    elif(board.get_cell_value(5,5) == 0):
-                        return 2;
-                    else:
-                        myEval=(firstThrees *10 + firstTwos*4 -secondThrees *10 +secondTwos *4)
-
-                return myEval
-
+                return self.myEval(board)
 
 
     def blockAndEval(self,board):
@@ -233,31 +188,8 @@ class StudentAgent(RandomAgent):
             return -10000;
 
         else:
+            return self.myEval(board)
 
-            firstTwos=0
-            secondTwos=0
-            firstThrees=0
-            secondThrees=0
-            twos = []
-            threes = []
-            myEval=0
-            firstTwos,secondTwos,firstThrees,secondThrees=board.numOfTwosAndThrees()
-            if self.id==2:
-                if(board.get_cell_value(5,4) == 0):
-                    return 1;
-                elif(board.get_cell_value(5,5) == 0):
-                    return 2;
-                else:
-                    myEval=(secondThrees *10 + secondTwos*4-firstThrees *10 +firstTwos *4)
-            else:
-                if(board.get_cell_value(5,4) == 0):
-                    return 1;
-                elif(board.get_cell_value(5,5) == 0):
-                    return 2;
-                else:
-                    myEval=(firstThrees *10 + firstTwos*4 -secondThrees *10 +secondTwos *4)
-
-            return myEval
 
 
     def printBoard(self,board):
@@ -270,34 +202,59 @@ class StudentAgent(RandomAgent):
             print(vals);
         print(" ")
 
-    def _threesAndTwos_rows(board):
+
+    def myEval(self, board):
+        val=1
+        if self.id==2:
+            val==1
+        if self.id==1:
+            val ==2
+        for row in range (0,6):
+                if board.get_cell_value(row,1)==val and board.get_cell_value(row,2)==val and board.get_cell_value(row,0)==0 and board.get_cell_value(row,3)==0:
+                    myEval= -10000
+                elif board.get_cell_value(row,2)==val and board.get_cell_value(row,3)==val and board.get_cell_value(row,1)==0 and board.get_cell_value(row,4)==0:
+                    myEval= -10000
+                elif board.get_cell_value(row,3)==val and board.get_cell_value(row,4)==val and board.get_cell_value(row,2)==0 and board.get_cell_value(row,5)==0:
+                    myEval= -10000
+                elif board.get_cell_value(row,4)==val and board.get_cell_value(row,5)==val and board.get_cell_value(row,3)==0 and board.get_cell_value(row,6)==0:
+                    myEval= -10000
+                else:
+                    firstTwos=0
+                    secondTwos=0
+                    firstThrees=0
+                    secondThrees=0
+                    twos = []
+                    threes = []
+                    myEval=0
+                    firstTwos,secondTwos,firstThrees,secondThrees=self.totalTwosAndThrees(board)
+                    if self.id==2:
+                        myEval=(secondThrees *10 + secondTwos*4-firstThrees *10 +firstTwos *4)
+                    else: 
+                        myEval=(firstThrees *10 + firstTwos*4 -secondThrees *10 +secondTwos *4)
+        return myEval
+    def rowTwosThrees(self, board):
         threes=[]
         twos=[]
-        for row in board:
-            same_count = 1
-            curr = row[0]
-            for i in range(1, board.width):
-                if row[i] == curr:
+        rows=[]
+        same_count =1
+        for row in range(0,6):
+            curr = board.get_cell_value(row,0)
+            for col in range(1,7):
+                if board.get_cell_value(row,col)==curr:
                     same_count += 1
                     if same_count == 2 and curr != 0:
                         twos.append(curr) 
                     if same_count == 3 and curr != 0:
-                        threes.append(curr)  
-                else:
-                    same_count = 1
-                    curr = row[i]
-        return(twos,threes)  
-
-
-    def _threesAndTwos_columns(board):
+                        threes.append(curr) 
+        return(twos,threes)
+    def colTwosThrees(self, board):
         threes=[]
         twos=[]
-        for i in range(board.width):
+        for i in range(0,7):
             same_count = 1
-           
-            curr =board[0][i]
-            for j in range(1, board.height):
-                if ard[j][i] == curr:
+            curr = board.get_cell_value(0,i)
+            for j in range(1, 6):
+                if board.get_cell_value(j,i) == curr:
                     same_count += 1
                     if same_count == 2 and curr != 0:
                         twos.append(curr)
@@ -305,30 +262,20 @@ class StudentAgent(RandomAgent):
                         threes.append(curr)    
                 else:
                     same_count = 1
-                    curr = board[j][i]
+                    curr = board.get_cell_value(j,i)
         return(twos,threes)
-        
 
-
-    def _threesAndTwos_diagonals(board):
-        boards = [
-            board,
-            [row[::-1] for row in copy.deepcopy(board)]
-        ]
+    def diagTwosThrees(self, board):
         twos=[]
         threes=[]
-        for b in boards:
-            for i in range(board.width - board.num_to_connect + 1):
-                for j in range(board.height - board.num_to_connect + 1):
-                    if i > 0 and j > 0:  # would be a redundant diagonal
-                        continue
-
-                    # (j, i) is start of diagonal
+        for i in range(4):
+            for j in range(3):
+                if i > 0 and j > 0:  # would be a redundant diagonal
+                    continue
                     same_count = 1
-                   
-                    curr = b[j][i]
+                    curr = board.get_cell_value(j,i)
                     k, m = j + 1, i + 1
-                    while k < board.height and m < board.width:
+                    while k < 6 and m < 7:
                             if b[k][m] == curr:
                                 same_count += 1
                                 if same_count is 2 and curr != 0:
@@ -342,11 +289,7 @@ class StudentAgent(RandomAgent):
                             m += 1
         return(twos,threes)
 
-
-
-
-
-    def numOfTwosAndThrees(self):
+    def totalTwosAndThrees(self,board):
         twosRow=[]
         threesRow=[]
         twosCol=[]
@@ -357,9 +300,9 @@ class StudentAgent(RandomAgent):
         secondTwos=0
         firstThrees=0
         secondThrees=0
-        twosRow, threesRow = self._threesAndTwos_rows()
-        twosCol, threesCol, = self._threesAndTwos_columns()
-        twosDiag,threesDiag =self._threesAndTwos_diagonals()
+        twosRow, threesRow = self.rowTwosThrees(board)
+        twosCol, threesCol, = self.colTwosThrees(board)
+        twosDiag,threesDiag =self.diagTwosThrees(board)
     
         for item in twosRow+twosCol+twosDiag:
             if item == 1:
@@ -372,6 +315,12 @@ class StudentAgent(RandomAgent):
             else:
                 secondThrees+=1
         return (firstTwos,secondTwos,firstThrees,secondThrees)          
+
+        
+
+
+
+                
 
         """
         Your evaluation function should look at the current state and return a score for it.
